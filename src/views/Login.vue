@@ -56,7 +56,7 @@ export default class LoginPage extends Vue {
   loadingLogin: boolean = false;
   async login() {
     this.loadingLogin = true;
-
+    this.$router.push("/");
     this.loadingLogin = false;
   }
 }
