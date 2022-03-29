@@ -2,13 +2,14 @@
   <div>
     <div class="container">
       <div class="card pt-2">
-        <v-btn text dark block class="mb-2" @click="back"
-          ><v-icon>mdi-arrow-left-thin-circle-outline</v-icon>Voltar</v-btn
-        >
+        <v-btn text dark block class="mb-2" @click="back">
+          <v-icon>mdi-arrow-left-thin-circle-outline</v-icon>
+          Voltar
+        </v-btn>
         <div class="card-sub">imagem</div>
         <div class="card-content">
           <h2 class="mb-3">{{ titulo }}</h2>
-          <v-btn color="primary" block>Cadastrar</v-btn>
+          <v-btn color="primary" block rounded>Cadastrar</v-btn>
         </div>
       </div>
     </div>

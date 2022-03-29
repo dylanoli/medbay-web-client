@@ -7,9 +7,11 @@
         <div class="card-content">
           <h2>{{ el.titulo }}</h2>
           <div class="card-text">
-            {{ el.descricao }}
+            <p>{{ el.descricao }}</p>
           </div>
-          <v-btn color="primary" block @click="goTo(el.to)">Abrir</v-btn>
+          <v-btn color="primary" block @click="goTo(el.to)" rounded
+            >Abrir</v-btn
+          >
         </div>
       </div>
     </div>
@@ -69,6 +71,9 @@ export default class Home extends Vue {
   padding: 20px 10%;
   display: flex;
   justify-content: space-around;
+}
+p {
+  font-size: 11pt;
 }
 .card {
   width: 250px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="bar">
+  <div class="bar mb-5">
     <div></div>
     <a class="mr-5" @click="logout"
       ><div class="btn">

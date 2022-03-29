@@ -12,12 +12,14 @@
             :rules="[(v) => !!v || 'login é obrigatório']"
             dense
             required
+            rounded
             v-model="cpf"
           ></v-text-field>
           <v-text-field
             v-model="senha"
             label="Senha"
             type="password"
+            rounded
             @keydown.enter="login()"
             outlined
             :rules="[(v) => !!v || 'a senha é obrigatório']"
@@ -27,6 +29,7 @@
         <v-btn
           block
           depressed
+          rounded
           color="primary"
           v-on:click="login()"
           :loading="loadingLogin"
