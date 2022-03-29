@@ -1,1 +1,29 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.5 100"><defs><style>.cls-1{fill:#1697f6;}.cls-2{fill:#7bc6ff;}.cls-3{fill:#1867c0;}.cls-4{fill:#aeddff;}</style></defs><title>Artboard 46</title><polyline class="cls-1" points="43.75 0 23.31 0 43.75 48.32"/><polygon class="cls-2" points="43.75 62.5 43.75 100 0 14.58 22.92 14.58 43.75 62.5"/><polyline class="cls-3" points="43.75 0 64.19 0 43.75 48.32"/><polygon class="cls-4" points="64.58 14.58 87.5 14.58 43.75 100 43.75 62.5 64.58 14.58"/></svg>
+<svg width="1128" height="1114" viewBox="0 0 1128 1114" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M974.493 95.1809L738.94 267.503V467.714L822.902 529.249L1128 306.266L974.493 95.1809Z" fill="url(#paint0_linear_129_104)"/>
+<path d="M433.721 678.799V1113.89H694.156V869.159L433.721 678.799Z" fill="url(#paint1_linear_129_104)"/>
+<path d="M694.156 435.091V0H433.721V244.731L694.156 435.091Z" fill="url(#paint2_linear_129_104)"/>
+<path d="M153.377 95.1809L0 306.266L974.495 1018.71L1128 807.753L153.377 95.1809Z" fill="url(#paint3_linear_129_104)"/>
+<path d="M389.058 646.177L304.968 584.642L0 807.753L153.377 1018.71L389.058 846.388V646.177Z" fill="url(#paint4_linear_129_104)"/>
+<defs>
+<linearGradient id="paint0_linear_129_104" x1="747.865" y1="472.881" x2="1031.69" y2="189.785" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5A189A"/>
+<stop offset="0.8166" stop-color="#9D4EDD"/>
+</linearGradient>
+<linearGradient id="paint1_linear_129_104" x1="563.96" y1="798.351" x2="563.96" y2="1127.09" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5A189A"/>
+<stop offset="0.8166" stop-color="#9D4EDD"/>
+</linearGradient>
+<linearGradient id="paint2_linear_129_104" x1="563.96" y1="371.565" x2="563.96" y2="-59.6795" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5A189A"/>
+<stop offset="0.8166" stop-color="#9D4EDD"/>
+</linearGradient>
+<linearGradient id="paint3_linear_129_104" x1="563.958" y1="1106.71" x2="563.958" y2="237.846" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5A189A"/>
+<stop offset="0.8166" stop-color="#9D4EDD"/>
+</linearGradient>
+<linearGradient id="paint4_linear_129_104" x1="374.835" y1="646.242" x2="80.1973" y2="940.123" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5A189A"/>
+<stop offset="0.8166" stop-color="#9D4EDD"/>
+</linearGradient>
+</defs>
+</svg>
