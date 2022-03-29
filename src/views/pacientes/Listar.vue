@@ -2,11 +2,11 @@
   <div>
     <TopBar />
     <div class="content-med">
-      <CardMain titulo="Médicos" />
+      <CardMain titulo="Pacientes" />
       <div>
         <div style="display: flex; width: 60vw">
           <v-text-field
-            label="pesquisar médico"
+            label="pesquisar pacientes"
             prepend-icon="mdi-magnify"
             outlined
             dense
@@ -55,7 +55,7 @@ interface MenuItem {
     CardMain,
   },
 })
-export default class MedicoListar extends Vue {
+export default class PacientesListar extends Vue {
   headers: any[] = [
     { text: "CRM", value: "crm" },
     { text: "Nome", value: "nome" },
