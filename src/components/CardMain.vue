@@ -9,21 +9,28 @@
         <div class="card-sub">imagem</div>
         <div class="card-content">
           <h2 class="mb-3">{{ titulo }}</h2>
-          <v-btn color="primary" block rounded>Cadastrar</v-btn>
+          <v-btn color="primary" block rounded @click.stop="dialog = true"
+            >Cadastrar</v-btn
+          >
         </div>
       </div>
     </div>
+    <DialogActionMedico :dialog.sync="dialog" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import DialogActionMedico from "@/components/DialogActionMedico.vue";
 
 @Component({
-  components: {},
+  components: {
+    DialogActionMedico,
+  },
 })
 export default class CardMain extends Vue {
   @Prop({ required: true }) readonly titulo?: string;
+  dialog = false;
   constructor() {
     super();
   }
