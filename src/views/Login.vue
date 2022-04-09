@@ -1,11 +1,13 @@
 <template>
   <div class="grid-login">
     <div class="col-left">
+      <img src="../assets/banner.png" />
       <h1 class="space">Login.</h1>
       <p>Acesse com os dados utilizados no seu cadastro.</p>
       <div>
         <v-form ref="form">
           <v-text-field
+            id="login"
             label="Login"
             outlined
             type="text"
@@ -16,6 +18,7 @@
             rounded
           ></v-text-field>
           <v-text-field
+            id="password"
             v-model="auth.password"
             label="Senha"
             type="password"
@@ -38,6 +41,7 @@
       </div>
     </div>
     <div class="col-right">
+      <img src="../assets/logo-white.png" height="250px" />
       <h3>Gerenciamento Inteligente</h3>
       <p>
         O MedBay® – Sistema de Gestão Hospitalar, é um ERP que promove a
@@ -82,13 +86,13 @@ export default class LoginPage extends Vue {
 .col-left {
   width: 50%;
   text-align: left;
-  padding: 15% 9%;
+  padding: 12% 9%;
   height: 100vh;
 }
 .col-right {
   width: 50%;
   text-align: center;
-  padding: 15% 9%;
+  padding: 12% 9%;
   color: white;
   height: 100vh;
   background-color: var(--primary);

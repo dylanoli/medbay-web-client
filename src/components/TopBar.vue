@@ -1,6 +1,6 @@
 <template>
   <div class="bar mb-5">
-    <div></div>
+    <div class="ml-5"><img src="../assets/banner.png" height="60px" /></div>
     <a class="mr-5" @click="logout"
       ><div class="btn">
         <v-icon large color="primary">mdi-logout</v-icon>Log out

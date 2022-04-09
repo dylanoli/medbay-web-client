@@ -3,7 +3,9 @@
     <TopBar />
     <div class="container">
       <div v-for="el in menuItens" :key="el.titulo" class="card">
-        <div class="card-sub">imagem</div>
+        <div class="card-sub pt-5">
+          <img :src="getImgUrl(el.img)" height="200" />
+        </div>
         <div class="card-content">
           <h2>{{ el.titulo }}</h2>
           <div class="card-text">
@@ -23,12 +25,12 @@ import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import UserDTO from "@/models/UserDTO";
-import { use } from "vue/types/umd";
 
 interface MenuItem {
   titulo: string;
   descricao: string;
   to: string;
+  img: string;
 }
 
 @Component({
@@ -42,18 +44,21 @@ export default class Home extends Vue {
     descricao:
       "Tenha acesso a todos os dados referentes aos Médicos da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
     to: "/medicos",
+    img: "medico",
   };
   atendentes: MenuItem = {
     titulo: "Atendentes",
     descricao:
       "Tenha acesso a todos os dados referentes aos Atendentes da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
     to: "/atendentes",
+    img: "atendente",
   };
   pacientes: MenuItem = {
     titulo: "Pacientes",
     descricao:
       "Tenha acesso a todos os dados referentes aos Pacientes da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
     to: "/pacientes",
+    img: "paciente",
   };
 
   consultas: MenuItem = {
@@ -61,10 +66,14 @@ export default class Home extends Vue {
     descricao:
       "Tenha acesso a todos os dados referentes às Consultas da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
     to: "/consultas",
+    img: "consulta",
   };
 
   menuItens: MenuItem[] = [];
-
+  getImgUrl(url: string) {
+    var images = require.context("../assets/", false, /\.png$/);
+    return images("./" + url + ".png");
+  }
   goTo(link: string) {
     this.$router.push(link);
   }
