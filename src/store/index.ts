@@ -1,15 +1,22 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import errorMutation from './errorMutation';
+import successMutation from './successMutation';
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+Vue.use(Vuex);
+export interface StateApp {
+  error: false | string;
+  success: false | string;
+}
+const store = new Vuex.Store({
   state: {
+    error: false,
+    success: false,
   },
   mutations: {
+    ...errorMutation,
+    ...successMutation
   },
-  actions: {
-  },
-  modules: {
-  }
-})
+});
+
+export default store;
