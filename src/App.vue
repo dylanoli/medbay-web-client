@@ -34,6 +34,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import jwt_decode from "jwt-decode";
+import UserDTO from "./models/UserDTO";
 @Component({})
 export default class App extends Vue {
   constructor() {
@@ -43,8 +44,11 @@ export default class App extends Vue {
     if (token == null) {
       this.$router.push("/login");
     } else {
-      var decoded = jwt_decode(token);
-      console.log(decoded);
+      var decoded = jwt_decode(token) as any;
+      var user = new UserDTO();
+      user.username = decoded.sub;
+      user.roles = decoded.ROLE;
+      this.$store.commit("setUser", user);
     }
   }
   get error() {
@@ -84,5 +88,11 @@ export default class App extends Vue {
   --primary: #7b2cbf;
   --secondary: #9d4edd;
   --accent: #c77dff;
+}
+
+.alert {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px;
 }
 </style>

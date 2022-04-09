@@ -9,14 +9,14 @@
             label="Login"
             outlined
             type="text"
+            v-model="auth.username"
             :rules="[(v) => !!v || 'login é obrigatório']"
             dense
             required
             rounded
-            v-model="cpf"
           ></v-text-field>
           <v-text-field
-            v-model="senha"
+            v-model="auth.password"
             label="Senha"
             type="password"
             rounded
@@ -51,16 +51,26 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import AuthDTO from "@/models/AuthDTO";
+import AuthService from "@/services/AuthService";
 
 @Component
 export default class LoginPage extends Vue {
-  cpf: string = "";
-  senha: string = "";
+  auth: AuthDTO = new AuthDTO();
   loadingLogin: boolean = false;
+
   async login() {
     this.loadingLogin = true;
-    this.$router.push("/");
-    this.loadingLogin = false;
+    if ((this.$refs as any).form.validate()) {
+      try {
+        const token = await AuthService.login(this.auth);
+        localStorage.setItem("token", token);
+        this.$router.push("/");
+      } catch (error) {
+        this.$store.commit("setError", error);
+      }
+      this.loadingLogin = false;
+    }
   }
 }
 </script>
