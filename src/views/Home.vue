@@ -22,6 +22,8 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
+import UserDTO from "@/models/UserDTO";
+import { use } from "vue/types/umd";
 
 interface MenuItem {
   titulo: string;
@@ -53,15 +55,39 @@ export default class Home extends Vue {
       "Tenha acesso a todos os dados referentes aos Pacientes da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
     to: "/pacientes",
   };
+
+  consultas: MenuItem = {
+    titulo: "Consultas",
+    descricao:
+      "Tenha acesso a todos os dados referentes às Consultas da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
+    to: "/consultas",
+  };
+
   menuItens: MenuItem[] = [];
-  constructor() {
-    super();
-    this.menuItens.push(this.medicos);
-    this.menuItens.push(this.atendentes);
-    this.menuItens.push(this.pacientes);
-  }
+
   goTo(link: string) {
     this.$router.push(link);
+  }
+  get user() {
+    return this["$store"].state.user as UserDTO;
+  }
+  constructor() {
+    super();
+    if (this.user.roles.some((el) => el.authority == "ROLE_ADMIN")) {
+      this.menuItens.push(this.medicos);
+      this.menuItens.push(this.atendentes);
+      this.menuItens.push(this.pacientes);
+    } else if (
+      this.user.roles.some(
+        (el) =>
+          el.authority == "ROLE_ATENDENTE" || el.authority == "ROLE_MEDICO"
+      )
+    ) {
+      this.menuItens.push(this.consultas);
+      this.menuItens.push(this.pacientes);
+    } else {
+      this.$router.push("/home");
+    }
   }
 }
 </script>

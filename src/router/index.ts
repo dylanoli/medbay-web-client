@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import HomePaciente from '../views/HomePaciente.vue'
 import MedicoListar from '../views/medico/Listar.vue'
 import AtendentesListar from '../views/atendentes/Listar.vue'
 import PacientesListar from '../views/pacientes/Listar.vue'
@@ -19,6 +20,11 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/home',
+    name: 'HomePaciente',
+    component: HomePaciente
   },
   {
     path: '/medicos',

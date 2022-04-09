@@ -4,5 +4,7 @@ export default class UserDTO {
 }
 
 interface Role {
-    authority: string
+    authority: RoleEnum
 }
+
+type RoleEnum = 'ROLE_MEDICO' | 'ROLE_ATENDENTE' | 'ROLE_ADMIN' | 'ROLE_PACIENTE'
