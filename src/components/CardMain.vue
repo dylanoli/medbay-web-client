@@ -6,7 +6,9 @@
           <v-icon>mdi-arrow-left-thin-circle-outline</v-icon>
           Voltar
         </v-btn>
-        <div class="card-sub">imagem</div>
+        <div class="card-sub pt-5">
+          <img :src="getImgUrl(img)" height="200" />
+        </div>
         <div class="card-content">
           <h2 class="mb-3">{{ titulo }}</h2>
           <v-btn color="primary" block rounded @click.stop="dialog = true"
@@ -30,9 +32,16 @@ import DialogActionMedico from "@/components/DialogActionMedico.vue";
 })
 export default class CardMain extends Vue {
   @Prop({ required: true }) readonly titulo?: string;
+  @Prop({ required: true }) readonly img?: string;
+
   dialog = false;
   constructor() {
     super();
+  }
+
+  getImgUrl(url: string) {
+    var images = require.context("../assets/", false, /\.png$/);
+    return images("./" + url + ".png");
   }
 
   back() {

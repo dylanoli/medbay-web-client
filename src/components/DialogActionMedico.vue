@@ -1,7 +1,10 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500">
     <v-card>
-      <v-card-title class="text-h5"> Cadastro médico </v-card-title>
+      <v-card-title class="text-h5" v-if="isCreate">
+        Cadastro médico
+      </v-card-title>
+      <v-card-title class="text-h5" v-else> Alterar médico </v-card-title>
       <div style="margin: 20px">
         <v-text-field
           v-model="cpf"
@@ -46,7 +49,12 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Cancelar </v-btn>
-        <v-btn color="primary" dark @click="dialog = false"> Cadastrar </v-btn>
+        <v-btn color="primary" dark @click="dialog = false" v-if="isCreate">
+          Cadastrar
+        </v-btn>
+        <v-btn color="primary" dark @click="dialog = false" v-else>
+          Alterar
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -66,6 +74,7 @@ import { Prop, Watch } from "vue-property-decorator";
 })
 export default class DialogActionMedico extends Vue {
   @Prop({ required: true }) dialog!: boolean;
+  @Prop({ default: true }) isCreate!: boolean;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
