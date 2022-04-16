@@ -22,6 +22,9 @@
             class="elevation-1"
           >
             <template v-slot:item.action="{ item }">
+              <v-btn icon color="primary" @click="openVer()">
+                <v-icon>mdi-eye-outline</v-icon>
+              </v-btn>
               <v-btn icon color="primary" @click="openEditar()">
                 <v-icon>mdi-square-edit-outline</v-icon>
               </v-btn>
@@ -34,7 +37,8 @@
       </div>
     </div>
 
-    <DialogActionMedico :dialog.sync="dialogEdit" :isCreate="false" />
+    <DialogActionMedico :dialog.sync="dialogEdit" mode="edit" />
+    <DialogActionMedico :dialog.sync="dialogView" mode="view" />
     <DialogDeleteMedico :dialog.sync="dialogApaga" />
   </div>
 </template>
@@ -65,6 +69,12 @@ interface MenuItem {
 export default class MedicoListar extends Vue {
   dialogEdit = false;
   dialogApaga = false;
+  dialogView = false;
+
+  openVer() {
+    this.dialogView = true;
+  }
+
   openEditar() {
     this.dialogEdit = true;
   }

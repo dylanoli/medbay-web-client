@@ -1,21 +1,28 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500">
     <v-card>
-      <v-card-title class="text-h5" v-if="isCreate">
+      <v-card-title class="text-h5" v-if="mode == 'add'">
         Cadastro médico
       </v-card-title>
-      <v-card-title class="text-h5" v-else> Alterar médico </v-card-title>
+      <v-card-title class="text-h5" v-if="mode == 'view'">
+        Médico
+      </v-card-title>
+      <v-card-title class="text-h5" v-if="mode == 'edit'">
+        Alterar médico
+      </v-card-title>
       <div style="margin: 20px">
         <v-text-field
           v-model="cpf"
           label="CPF*"
           type="text"
+          :readonly="mode == 'view'"
           v-mask="'###.###.###-##'"
           :rules="[(v) => !!v || 'CPF é obrigatório']"
           outlined
           dense
         ></v-text-field>
         <v-text-field
+          :readonly="mode == 'view'"
           id="name"
           v-model="nome"
           label="Nome*"
@@ -24,19 +31,32 @@
           :rules="[(v) => !!v || 'nome é obrigatório']"
           dense
         ></v-text-field>
-        <v-btn
-          class="mr-5 mb-5"
-          :color="genero == 'masculino' ? 'primary' : ''"
-          @click="genero = 'masculino'"
-          >Masculino</v-btn
-        >
-        <v-btn
-          class="mb-5"
-          :color="genero == 'feminino' ? 'primary' : ''"
-          @click="genero = 'feminino'"
-          >Feminino</v-btn
-        >
+        <div v-if="mode !== 'view'">
+          <v-btn
+            class="mr-5 mb-5"
+            :color="genero == 'masculino' ? 'primary' : ''"
+            @click="genero = 'masculino'"
+            >Masculino</v-btn
+          >
+          <v-btn
+            class="mb-5"
+            :color="genero == 'feminino' ? 'primary' : ''"
+            @click="genero = 'feminino'"
+            >Feminino</v-btn
+          >
+        </div>
+        <div v-else>
+          <v-text-field
+            readonly
+            v-model="genero"
+            label="Gênero*"
+            type="text"
+            outlined
+            dense
+          ></v-text-field>
+        </div>
         <v-text-field
+          :readonly="mode == 'view'"
           v-model="dataNascimento"
           label="Data de nascimento"
           type="text"
@@ -44,15 +64,25 @@
           outlined
           dense
         ></v-text-field>
-        <EnderecoInput :target.sync="endereco" />
+        <EnderecoInput :target.sync="endereco" :readonly="mode == 'view'" />
       </div>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="dialog = false"> Cancelar </v-btn>
-        <v-btn color="primary" dark @click="dialog = false" v-if="isCreate">
+        <v-btn text @click="dialog = false"> Fechar </v-btn>
+        <v-btn
+          color="primary"
+          dark
+          @click="dialog = false"
+          v-if="mode == 'add'"
+        >
           Cadastrar
         </v-btn>
-        <v-btn color="primary" dark @click="dialog = false" v-else>
+        <v-btn
+          color="primary"
+          dark
+          @click="dialog = false"
+          v-if="mode == 'edit'"
+        >
           Alterar
         </v-btn>
       </v-card-actions>
@@ -74,7 +104,7 @@ import { Prop, Watch } from "vue-property-decorator";
 })
 export default class DialogActionMedico extends Vue {
   @Prop({ required: true }) dialog!: boolean;
-  @Prop({ default: true }) isCreate!: boolean;
+  @Prop({ default: "add" }) mode!: boolean;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
