@@ -2,7 +2,7 @@
   <div>
     <TopBar />
     <div class="content-med">
-      <CardMain titulo="Pacientes" />
+      <CardMain titulo="Pacientes" img="paciente" />
       <div>
         <div style="display: flex; width: 60vw">
           <v-text-field
@@ -22,10 +22,13 @@
             class="elevation-1"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn icon color="primary">
+              <v-btn icon color="primary" @click="openVer()">
+                <v-icon>mdi-eye-outline</v-icon>
+              </v-btn>
+              <v-btn icon color="primary" @click="openEditar()">
                 <v-icon>mdi-square-edit-outline</v-icon>
               </v-btn>
-              <v-btn icon color="primary">
+              <v-btn icon color="primary" @click="openApagar()">
                 <v-icon>mdi-trash-can-outline</v-icon>
               </v-btn>
             </template>
@@ -33,6 +36,10 @@
         </div>
       </div>
     </div>
+
+    <DialogActionPaciente :dialog.sync="dialogEdit" mode="edit" />
+    <DialogActionPaciente :dialog.sync="dialogView" mode="view" />
+    <DialogDeletePaciente :dialog.sync="dialogApaga" />
   </div>
 </template>
 
@@ -41,7 +48,8 @@ import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import CardMain from "@/components/CardMain.vue";
-import Medico from "@/models/Medico";
+import DialogDeletePaciente from "@/components/atendentes/DialogDeletePaciente.vue";
+import Paciente from "@/models/Paciente";
 
 interface MenuItem {
   titulo: string;
@@ -53,79 +61,84 @@ interface MenuItem {
   components: {
     TopBar,
     CardMain,
+    DialogDeletePaciente,
   },
 })
 export default class PacientesListar extends Vue {
+  dialogEdit = false;
+  dialogApaga = false;
+  dialogView = false;
   headers: any[] = [
-    { text: "CRM", value: "crm" },
     { text: "Nome", value: "nome" },
     { text: "CPF", value: "cpf" },
     { text: "Idade", value: "idade" },
     { text: " ", value: "action" },
   ];
-  medicos: Medico[] = [
+
+  openVer() {
+    this.dialogView = true;
+  }
+
+  openEditar() {
+    this.dialogEdit = true;
+  }
+
+  openApagar() {
+    this.dialogApaga = true;
+  }
+
+  medicos: Paciente[] = [
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,
     },
     {
-      crm: "00000000-0/BR",
       nome: "Joao Macedo Cunha",
       cpf: "000.000.000-00",
       idade: 40,

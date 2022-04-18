@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DialogActionMedico from "@/components/DialogActionMedico.vue";
+import DialogActionMedico from "@/components/medicos/DialogActionMedico.vue";
 
 @Component({
   components: {

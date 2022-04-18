@@ -48,8 +48,8 @@ import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import CardMain from "@/components/CardMain.vue";
-import DialogActionMedico from "@/components/DialogActionMedico.vue";
-import DialogDeleteMedico from "@/components/DialogDeleteMedico.vue";
+import DialogActionMedico from "@/components/medicos/DialogActionMedico.vue";
+import DialogDeleteMedico from "@/components/medicos/DialogDeleteMedico.vue";
 import Medico from "@/models/Medico";
 
 interface MenuItem {
