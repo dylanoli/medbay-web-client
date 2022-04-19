@@ -17,22 +17,26 @@
         </div>
       </div>
     </div>
-    <DialogActionMedico :dialog.sync="dialog" />
+    <DialogActionMedico :dialog.sync="dialog" v-if="mode == 'medico'" />
+    <DialogActionPaciente :dialog.sync="dialog" v-if="mode == 'paciente'" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import DialogActionMedico from "@/components/medicos/DialogActionMedico.vue";
+import DialogActionPaciente from "@/components/paciente/DialogActionPaciente.vue";
 
 @Component({
   components: {
     DialogActionMedico,
+    DialogActionPaciente,
   },
 })
 export default class CardMain extends Vue {
   @Prop({ required: true }) readonly titulo?: string;
   @Prop({ required: true }) readonly img?: string;
+  @Prop({ default: "medico" }) readonly mode?: string;
 
   dialog = false;
   constructor() {

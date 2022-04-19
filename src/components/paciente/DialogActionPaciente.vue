@@ -2,13 +2,13 @@
   <v-dialog v-model="dialog" persistent max-width="500">
     <v-card>
       <v-card-title class="text-h5" v-if="mode == 'add'">
-        Cadastro do Atendente
+        Cadastro do Paciente
       </v-card-title>
       <v-card-title class="text-h5" v-if="mode == 'view'">
-        Atendente
+        Paciente
       </v-card-title>
       <v-card-title class="text-h5" v-if="mode == 'edit'">
-        Alterar Atendente
+        Alterar Paciente
       </v-card-title>
       <div style="margin: 20px">
         <v-text-field

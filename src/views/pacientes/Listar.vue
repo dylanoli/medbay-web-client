@@ -2,7 +2,7 @@
   <div>
     <TopBar />
     <div class="content-med">
-      <CardMain titulo="Pacientes" img="paciente" />
+      <CardMain titulo="Pacientes" img="paciente" mode="paciente" />
       <div>
         <div style="display: flex; width: 60vw">
           <v-text-field
@@ -48,7 +48,8 @@ import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import CardMain from "@/components/CardMain.vue";
-import DialogDeletePaciente from "@/components/atendentes/DialogDeletePaciente.vue";
+import DialogDeletePaciente from "@/components/paciente/DialogDeletePaciente.vue";
+import DialogActionPaciente from "@/components/paciente/DialogActionPaciente.vue";
 import Paciente from "@/models/Paciente";
 
 interface MenuItem {
@@ -62,6 +63,7 @@ interface MenuItem {
     TopBar,
     CardMain,
     DialogDeletePaciente,
+    DialogActionPaciente,
   },
 })
 export default class PacientesListar extends Vue {
