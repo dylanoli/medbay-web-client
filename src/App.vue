@@ -33,23 +33,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import jwt_decode from "jwt-decode";
-import UserDTO from "./models/UserDTO";
 @Component({})
 export default class App extends Vue {
   constructor() {
     super();
-    const token = localStorage.getItem("token");
-
-    if (token == null) {
-      this.$router.push("/login");
-    } else {
-      var decoded = jwt_decode(token) as any;
-      var user = new UserDTO();
-      user.username = decoded.sub;
-      user.roles = decoded.ROLE;
-      this.$store.commit("setUser", user);
-    }
   }
   get error() {
     return this["$store"].state.error;

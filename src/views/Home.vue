@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import UserDTO from "@/models/UserDTO";
@@ -77,11 +77,13 @@ export default class Home extends Vue {
   goTo(link: string) {
     this.$router.push(link);
   }
+
   get user() {
     return this["$store"].state.user as UserDTO;
   }
-  constructor() {
-    super();
+
+  @Watch("user")
+  changeUser() {
     if (this.user.roles.some((el) => el.authority == "ROLE_ADMIN")) {
       this.menuItens.push(this.medicos);
       this.menuItens.push(this.atendentes);
@@ -97,6 +99,9 @@ export default class Home extends Vue {
     } else {
       this.$router.push("/home");
     }
+  }
+  constructor() {
+    super();
   }
 }
 </script>
