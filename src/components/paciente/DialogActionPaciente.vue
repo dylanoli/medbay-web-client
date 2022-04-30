@@ -34,14 +34,14 @@
         <div v-if="mode !== 'view'">
           <v-btn
             class="mr-5 mb-5"
-            :color="genero == 'masculino' ? 'primary' : ''"
-            @click="genero = 'masculino'"
+            :color="genero == 'Masculino' ? 'primary' : ''"
+            @click="genero = 'Masculino'"
             >Masculino</v-btn
           >
           <v-btn
             class="mb-5"
-            :color="genero == 'feminino' ? 'primary' : ''"
-            @click="genero = 'feminino'"
+            :color="genero == 'Feminino' ? 'primary' : ''"
+            @click="genero = 'Feminino'"
             >Feminino</v-btn
           >
         </div>
@@ -72,12 +72,7 @@
         <v-btn color="primary" dark @click="save()" v-if="mode == 'add'">
           Cadastrar
         </v-btn>
-        <v-btn
-          color="primary"
-          dark
-          @click="dialog = false"
-          v-if="mode == 'edit'"
-        >
+        <v-btn color="primary" dark @click="save()" v-if="mode == 'edit'">
           Alterar
         </v-btn>
       </v-card-actions>
@@ -99,19 +94,49 @@ import { Prop, Watch } from "vue-property-decorator";
     EnderecoInput,
   },
 })
-export default class DialogActionMedico extends Vue {
+export default class DialogActionPaciente extends Vue {
   @Prop({ required: true }) dialog!: boolean;
-  @Prop({ default: "add" }) mode!: boolean;
+  @Prop() pessoaId!: number;
+  @Prop({ default: "add" }) mode!: string;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
+    if (this.mode !== "add") {
+      this.find();
+    }
   }
+  @Watch("pessoaId")
+  changePessoaId() {
+    if (this.mode !== "add") {
+      this.find();
+    }
+  }
+  @Watch("mode")
+  changeMode() {
+    if (this.mode !== "add") {
+      this.find();
+    }
+  }
+
   cpf = "";
   nome = "";
   dataNascimento = "";
-  genero = "masculino";
+  genero = "Masculino";
   endereco = new EnderecoDTO();
+  async find() {
+    const pessoa = (await PacienteService.find(this.pessoaId)) as any;
+    this.cpf = pessoa.document;
+    this.nome = pessoa.name;
+    this.genero = pessoa.gender == "MALE" ? "Masculino" : "Feminino";
+    this.dataNascimento = pessoa.birth;
 
+    this.endereco.cep = pessoa.address.cep;
+    this.endereco.rua = pessoa.address.street;
+    this.endereco.numero = pessoa.address.number;
+    this.endereco.bairro = pessoa.address.country;
+    this.endereco.cidade = pessoa.address.city;
+    this.endereco.uf = pessoa.address.uf;
+  }
   async save() {
     let pessoa = new PessoaDTO();
     pessoa.document = this.cpf;
@@ -121,15 +146,22 @@ export default class DialogActionMedico extends Vue {
 
     const dataVet = this.dataNascimento.split("/");
     pessoa.birth = `${dataVet[0]}-${dataVet[1]}-${dataVet[2]}`;
-    pessoa.gender = this.genero == "masculino" ? "MALE" : "FEMALE";
+    pessoa.gender = this.genero == "Masculino" ? "MALE" : "FEMALE";
     pessoa.address.cep = this.endereco.cep;
     pessoa.address.street = this.endereco.rua;
     pessoa.address.number = this.endereco.numero;
     pessoa.address.country = this.endereco.bairro;
     pessoa.address.city = this.endereco.cidade;
     pessoa.address.uf = this.endereco.uf;
-    await PacienteService.create(pessoa);
+    if (this.mode == "add") await PacienteService.create(pessoa);
+    if (this.mode == "edit") {
+      pessoa.id = this.pessoaId;
+      await PacienteService.update(pessoa);
+    }
     this.dialog = false;
+  }
+  constructor() {
+    super();
   }
 }
 </script>

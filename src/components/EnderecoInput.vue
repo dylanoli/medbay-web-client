@@ -61,18 +61,6 @@
       </v-col>
     </v-row>
     <v-row no-gutters>
-      <v-col cols="12">
-        <v-text-field
-          :readonly="readonly"
-          label="Complemento"
-          outlined
-          type="text"
-          dense
-          v-model="endereco.complemento"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row no-gutters>
       <v-col md="9" cols="12" style="padding-right: 12px">
         <v-text-field
           :readonly="readonly"

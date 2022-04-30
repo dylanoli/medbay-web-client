@@ -8,6 +8,7 @@ import VueTheMask from 'vue-the-mask'
 
 Vue.config.productionTip = false
 Vue.use(VueTheMask)
+Vue.use(require('vue-moment'));
 new Vue({
   router,
   store,
