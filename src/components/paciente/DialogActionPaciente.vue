@@ -145,7 +145,7 @@ export default class DialogActionPaciente extends Vue {
     pessoa.password = "senha123";
 
     const dataVet = this.dataNascimento.split("/");
-    pessoa.birth = `${dataVet[0]}-${dataVet[1]}-${dataVet[2]}`;
+    pessoa.birth = `${dataVet[0]}/${dataVet[1]}/${dataVet[2]}`;
     pessoa.gender = this.genero == "Masculino" ? "MALE" : "FEMALE";
     pessoa.address.cep = this.endereco.cep;
     pessoa.address.street = this.endereco.rua;

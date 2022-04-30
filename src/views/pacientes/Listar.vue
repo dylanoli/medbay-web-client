@@ -106,8 +106,8 @@ export default class PacientesListar extends Vue {
     const list = (await PacienteService.list()) as any;
     this.pacientes = list.content.map((item: any) => {
       const today = moment().format("yyyy");
-      const dataVet = item.birth.split("-");
-      const birth = moment(`${dataVet[2]}-${dataVet[1]}-${dataVet[0]}`).format(
+      const dataVet = item.birth.split("/");
+      const birth = moment(`${dataVet[2]}/${dataVet[1]}/${dataVet[0]}`).format(
         "yyyy"
       );
       return {
