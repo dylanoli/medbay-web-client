@@ -69,12 +69,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Fechar </v-btn>
-        <v-btn
-          color="primary"
-          dark
-          @click="dialog = false"
-          v-if="mode == 'add'"
-        >
+        <v-btn color="primary" dark @click="save()" v-if="mode == 'add'">
           Cadastrar
         </v-btn>
         <v-btn
@@ -95,6 +90,8 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import EnderecoDTO from "@/models/EnderecoDTO";
 import EnderecoInput from "@/components/EnderecoInput.vue";
+import PessoaDTO from "@/models/PessoaDTO";
+import PacienteService from "@/services/PacienteService";
 import { Prop, Watch } from "vue-property-decorator";
 
 @Component({
@@ -114,6 +111,26 @@ export default class DialogActionMedico extends Vue {
   dataNascimento = "";
   genero = "masculino";
   endereco = new EnderecoDTO();
+
+  async save() {
+    let pessoa = new PessoaDTO();
+    pessoa.document = this.cpf;
+    pessoa.name = this.nome;
+    pessoa.username = this.cpf;
+    pessoa.password = "senha123";
+
+    const dataVet = this.dataNascimento.split("/");
+    pessoa.birth = `${dataVet[0]}-${dataVet[1]}-${dataVet[2]}`;
+    pessoa.gender = this.genero == "masculino" ? "MALE" : "FEMALE";
+    pessoa.address.cep = this.endereco.cep;
+    pessoa.address.street = this.endereco.rua;
+    pessoa.address.number = this.endereco.numero;
+    pessoa.address.country = this.endereco.bairro;
+    pessoa.address.city = this.endereco.cidade;
+    pessoa.address.uf = this.endereco.uf;
+    await PacienteService.create(pessoa);
+    this.dialog = false;
+  }
 }
 </script>
 

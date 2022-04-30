@@ -4,3 +4,4 @@ export default interface Medico {
     cpf: string;
     idade: number;
 }
+

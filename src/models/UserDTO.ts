@@ -7,4 +7,4 @@ interface Role {
     authority: RoleEnum
 }
 
-type RoleEnum = 'ROLE_MEDICO' | 'ROLE_ATENDENTE' | 'ROLE_ADMIN' | 'ROLE_PACIENTE'
+export type RoleEnum = 'ROLE_MEDICO' | 'ROLE_ATENDENTE' | 'ROLE_ADMIN' | 'ROLE_PACIENTE'
