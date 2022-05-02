@@ -1,18 +1,7 @@
 <template>
   <div>
     <TopBar />
-    <div class="menu-principal">
-      <div class="foto-perfil">
-        <img src="../../assets/icon-user.png" height="80px" />
-      </div>
-      <div class="perfil">
-        <h3 class="nome">
-          Olá, <br />
-          Fulano
-        </h3>
-      </div>
-    </div>
-     <h1 class="titulo">Consultas</h1>
+    <div class="menu-principal"></div>
     <div class="content-usu">
       <div>
         <div style="display: flex; width: 60vw">
@@ -50,12 +39,13 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
-import Consulta from "@/models/Consulta.vue";
+import Consulta from "@/models/Consulta";
 //import DialogActionUsuario from "@/components/usuario/DialogActionUsuario.vue";
 
 @Component({
   components: {
     TopBar,
+    // DialogActionUsuario,
   },
 })
 export default class HomeUsuario extends Vue {
@@ -68,45 +58,52 @@ export default class HomeUsuario extends Vue {
     { text: " ", value: "action" },
   ];
 
-  consultas: Consulta[] = [
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-    {
-      nome: "Consulta de vista",
-      local: "Rua das Flores",
-      valor: 40,
-      data: "03/04/200",
-    },
-  ];
+      consultas: Consulta[] = [
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+        {
+        nome: "Consulta de vista",
+        local: "Rua das Flores",
+        valor: 40,
+        data: "03/04/200"
+
+        },
+    ]
 }
+
 </script>
 
 <style scoped>
@@ -121,26 +118,4 @@ export default class HomeUsuario extends Vue {
   list-style: none;
   padding: 100px 10px;
 }
-.foto-perfil {
-  margin-left: 20%;
-  width: 7%;
-  display: inline-block;
-}
-.perfil {
-  width: 7%;
-  display: inline-block;
-}
-.nome {
-  color: white;
-}
-.sub-menu ul{
-  margin: 0%;
-  background-color: white;
-  list-style: none;
-}
-.titulo{
-  margin-top: 2%;
-  margin-left: 20%;
-}
-
 </style>
