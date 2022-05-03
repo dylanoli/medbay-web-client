@@ -6,18 +6,20 @@
       <div>
         <div style="display: flex; width: 60vw">
           <v-text-field
+            v-model="searchText"
             label="pesquisar pacientes"
             prepend-icon="mdi-magnify"
             outlined
             dense
             class="mr-5"
+            @keyup.enter="search()"
           ></v-text-field>
-          <v-btn color="primary">buscar</v-btn>
+          <v-btn color="primary" @click="search()">buscar</v-btn>
         </div>
         <div class="table">
           <v-data-table
             :headers="headers"
-            :items="pacientes"
+            :items="pacientesSearch"
             :items-per-page="6"
             class="elevation-1"
           >
@@ -80,6 +82,7 @@ export default class PacientesListar extends Vue {
   dialogEdit = false;
   dialogApaga = false;
   dialogView = false;
+  searchText = "";
   idTarget = 0;
   headers: any[] = [
     { text: "Nome", value: "nome" },
@@ -88,6 +91,8 @@ export default class PacientesListar extends Vue {
     { text: " ", value: "action" },
   ];
 
+  pacientes: Paciente[] = [];
+  pacientesSearch: Paciente[] = [];
   @Watch("dialogEdit")
   changedialogEdit(val: boolean) {
     if (!val) this.list();
@@ -102,6 +107,15 @@ export default class PacientesListar extends Vue {
     super();
     this.list();
   }
+
+  search() {
+    this.pacientesSearch = this.pacientes.filter(
+      (el) =>
+        el.nome.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        el.cpf.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
   async list() {
     const list = (await PacienteService.list()) as any;
     this.pacientes = list.content.map((item: any) => {
@@ -117,6 +131,7 @@ export default class PacientesListar extends Vue {
         idade: +today - +birth,
       };
     });
+    this.search();
   }
 
   openVer(id: number) {
@@ -133,8 +148,6 @@ export default class PacientesListar extends Vue {
     this.idTarget = id;
     this.dialogApaga = true;
   }
-
-  pacientes: Paciente[] = [];
 }
 </script>
 
