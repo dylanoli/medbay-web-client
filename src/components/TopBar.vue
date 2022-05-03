@@ -29,9 +29,11 @@ export default class TopBar extends Vue {
       this.$router.push("/login");
     } else {
       var decoded = jwt_decode(token) as any;
+      console.log("decoded", decoded);
       var user = new UserDTO();
       user.username = decoded.sub;
       user.roles = decoded.ROLE;
+      user.name = decoded.NAME;
       this.$store.commit("setUser", user);
     }
   }

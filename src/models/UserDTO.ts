@@ -1,6 +1,7 @@
 export default class UserDTO {
     username = ''
     roles: Role[] = []
+    name = ''
 }
 
 interface Role {

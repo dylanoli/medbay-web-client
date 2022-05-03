@@ -3,16 +3,16 @@
     <TopBar />
     <div class="menu-principal">
       <div class="foto-perfil">
-        <img src="../../assets/icon-user.png" height="80px" />
+        <img src="../assets/icon-user.png" height="80px" />
       </div>
       <div class="perfil">
         <h3 class="nome">
           Olá, <br />
-          Fulano
+          {{ user.name }}
         </h3>
       </div>
     </div>
-     <h1 class="titulo">Consultas</h1>
+    <h1 class="titulo">Consultas</h1>
     <div class="content-usu">
       <div>
         <div style="display: flex; width: 60vw">
@@ -50,7 +50,8 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
-import Consulta from "@/models/Consulta.vue";
+import Consulta from "@/models/Consulta";
+import UserDTO from "@/models/UserDTO";
 //import DialogActionUsuario from "@/components/usuario/DialogActionUsuario.vue";
 
 @Component({
@@ -60,6 +61,10 @@ import Consulta from "@/models/Consulta.vue";
 })
 export default class HomeUsuario extends Vue {
   dialogView = false;
+
+  get user() {
+    return this["$store"].state.user as UserDTO;
+  }
   headers: any[] = [
     { text: "Nome", value: "nome" },
     { text: "Local", value: "local" },
@@ -133,14 +138,13 @@ export default class HomeUsuario extends Vue {
 .nome {
   color: white;
 }
-.sub-menu ul{
+.sub-menu ul {
   margin: 0%;
   background-color: white;
   list-style: none;
 }
-.titulo{
+.titulo {
   margin-top: 2%;
   margin-left: 20%;
 }
-
 </style>

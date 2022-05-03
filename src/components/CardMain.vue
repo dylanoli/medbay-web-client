@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DialogActionMedico from "@/components/medicos/DialogActionMedico.vue";
 import DialogActionPaciente from "@/components/paciente/DialogActionPaciente.vue";
 
@@ -41,6 +41,11 @@ export default class CardMain extends Vue {
   dialog = false;
   constructor() {
     super();
+  }
+
+  @Watch("dialog")
+  changeDialog(val: boolean) {
+    (this["$parent"] as any).list();
   }
 
   getImgUrl(url: string) {
