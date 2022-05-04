@@ -19,18 +19,21 @@
     </div>
     <DialogActionMedico :dialog.sync="dialog" v-if="mode == 'medico'" />
     <DialogActionPaciente :dialog.sync="dialog" v-if="mode == 'paciente'" />
+    <DialogActionAtendentes :dialog.sync="dialog" v-if="mode == 'atendente'" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DialogActionMedico from "@/components/medicos/DialogActionMedico.vue";
+import DialogActionAtendentes from "@/components/atendentes/DialogActionAtendentes.vue";
 import DialogActionPaciente from "@/components/paciente/DialogActionPaciente.vue";
 
 @Component({
   components: {
     DialogActionMedico,
     DialogActionPaciente,
+    DialogActionAtendentes,
   },
 })
 export default class CardMain extends Vue {
