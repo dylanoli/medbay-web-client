@@ -61,7 +61,7 @@ import moment from "moment";
 import CardMain from "@/components/CardMain.vue";
 import DialogDeletePaciente from "@/components/paciente/DialogDeletePaciente.vue";
 import DialogActionPaciente from "@/components/paciente/DialogActionPaciente.vue";
-import Paciente from "@/models/Paciente";
+import PessoaTable from "@/models/PessoaTable";
 import PacienteService from "@/services/PacienteService";
 
 interface MenuItem {
@@ -91,8 +91,8 @@ export default class PacientesListar extends Vue {
     { text: " ", value: "action" },
   ];
 
-  pacientes: Paciente[] = [];
-  pacientesSearch: Paciente[] = [];
+  pacientes: PessoaTable[] = [];
+  pacientesSearch: PessoaTable[] = [];
   @Watch("dialogEdit")
   changedialogEdit(val: boolean) {
     if (!val) this.list();

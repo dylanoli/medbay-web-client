@@ -59,9 +59,9 @@ import TopBar from "@/components/TopBar.vue";
 import CardMain from "@/components/CardMain.vue";
 import DialogActionAtendentes from "@/components/atendentes/DialogActionAtendentes.vue";
 import DialogDeleteAtendentes from "@/components/atendentes/DialogDeleteAtendentes.vue";
-import Atendente from "@/models/Atendente";
 import AtendenteService from "@/services/AtendenteService";
 import moment from "moment";
+import PessoaTable from "@/models/PessoaTable";
 
 interface MenuItem {
   titulo: string;
@@ -84,8 +84,8 @@ export default class AtendentesListar extends Vue {
     { text: "Idade", value: "idade" },
     { text: " ", value: "action" },
   ];
-  atendentesSearch: Atendente[] = [];
-  atendentes: Atendente[] = [];
+  atendentesSearch: PessoaTable[] = [];
+  atendentes: PessoaTable[] = [];
 
   dialogEdit = false;
   dialogApaga = false;

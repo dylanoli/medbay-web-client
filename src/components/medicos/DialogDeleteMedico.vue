@@ -6,7 +6,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Cancelar </v-btn>
-        <v-btn color="red darken-1" dark @click="dialog = false">
+        <v-btn color="red darken-1" dark @click="deletePessoa()">
           Apagar
         </v-btn>
       </v-card-actions>
@@ -19,6 +19,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import EnderecoInput from "@/components/EnderecoInput.vue";
 import { Prop, Watch } from "vue-property-decorator";
+import MedicoService from "@/services/MedicoService";
 
 @Component({
   components: {
@@ -27,9 +28,14 @@ import { Prop, Watch } from "vue-property-decorator";
 })
 export default class DialogDeleteMedico extends Vue {
   @Prop({ required: true }) dialog!: boolean;
+  @Prop() pessoaId!: number;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
+  }
+  async deletePessoa() {
+    await MedicoService.delete(this.pessoaId);
+    this.dialog = false;
   }
 }
 </script>

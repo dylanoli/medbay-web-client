@@ -1,4 +1,4 @@
-export default interface Paciente {
+export default interface PessoaTable {
     id: number;
     nome: string;
     cpf: string;
