@@ -6,6 +6,8 @@ import HomePaciente from '../views/HomePaciente.vue'
 import MedicoListar from '../views/medico/Listar.vue'
 import AtendentesListar from '../views/atendentes/Listar.vue'
 import PacientesListar from '../views/pacientes/Listar.vue'
+import ConsultaAtendenteListar from '../views/consultas/Listar.vue'
+
 import HomeUsuario from '../views/usuario/HomeUsuario.vue'
 
 Vue.use(VueRouter)
@@ -46,6 +48,12 @@ const routes: Array<RouteConfig> = [
     name: 'HomeUsuario',
     component: HomeUsuario
   },
+  {
+    path: '/atendentes/consultas',
+    name: 'ConsultaAtendenteListar',
+    component: ConsultaAtendenteListar
+  },
+
 ]
 
 const router = new VueRouter({

@@ -65,7 +65,7 @@ export default class Home extends Vue {
     titulo: "Consultas",
     descricao:
       "Tenha acesso a todos os dados referentes às Consultas da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
-    to: "/consultas",
+    to: "/atendentes/consultas",
     img: "consulta",
   };
 
