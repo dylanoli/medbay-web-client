@@ -6,4 +6,5 @@ export default class ConsultaDTO {
     medico = new MedicoDTO();
     paciente = new PessoaDTO();
     data = ''
+    observacoes: string[] = []
 }

@@ -112,8 +112,8 @@ export default class AtendentesListar extends Vue {
   }
 
   async list() {
-    const list = (await AtendenteService.list()) as any;
-    this.atendentes = list.content.map((item: any) => {
+    const list = await AtendenteService.list();
+    this.atendentes = list.map((item: any) => {
       const today = moment().format("yyyy");
       const dataVet = item.birth.split("/");
       const birth = moment(`${dataVet[2]}/${dataVet[1]}/${dataVet[0]}`).format(

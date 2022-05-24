@@ -86,7 +86,7 @@ export default class MedicoListar extends Vue {
   idTarget = 0;
   searchText = "";
   medicosSearch: MedicoTable[] = [];
-  medicos: MedicoTable[] = [];
+  medicos: any[] = [];
 
   @Watch("dialogEdit")
   changedialogEdit(val: boolean) {
@@ -114,8 +114,8 @@ export default class MedicoListar extends Vue {
   }
 
   async list() {
-    const list = (await MedicoService.list()) as any;
-    this.medicos = list.content.map((item: any) => {
+    const list = await MedicoService.list();
+    this.medicos = list.map((item: any) => {
       const today = moment().format("yyyy");
       const dataVet = item.birth.split("/");
       const birth = moment(`${dataVet[2]}/${dataVet[1]}/${dataVet[0]}`).format(

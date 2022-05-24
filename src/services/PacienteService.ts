@@ -55,6 +55,6 @@ export default class PacienteService {
                 Authorization: "Bearer " + token,
             },
         })
-        return data as string;
+        return data.content as PessoaDTO[];
     }
 }

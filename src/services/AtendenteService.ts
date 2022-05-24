@@ -55,6 +55,6 @@ export default class AtendenteService {
                 Authorization: "Bearer " + token,
             },
         })
-        return data as string;
+        return data.content as PessoaDTO[];
     }
 }

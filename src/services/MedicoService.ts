@@ -56,6 +56,6 @@ export default class MedicoService {
                 Authorization: "Bearer " + token,
             },
         })
-        return data as string;
+        return data.content as MedicoDTO[];
     }
 }
