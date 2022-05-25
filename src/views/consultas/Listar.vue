@@ -41,15 +41,10 @@
         </div>
       </div>
     </div>
-    <DialogActionAtendentes
-      :dialog.sync="dialogEdit"
-      mode="edit"
-      :pessoaId="idTarget"
-    />
-    <DialogActionAtendentes
+    <DialogActionConsultas
       :dialog.sync="dialogView"
       mode="view"
-      :pessoaId="idTarget"
+      :consultaId="idTarget"
     />
     <DialogDeleteAtendentes :dialog.sync="dialogApaga" :pessoaId="idTarget" />
   </div>
@@ -68,6 +63,7 @@ import PessoaTable from "@/models/PessoaTable";
 import ConsultaDTO from "@/models/ConsultaDTO";
 import ConsultaService from "@/services/ConsultaService";
 import PacienteService from "@/services/PacienteService";
+import DialogActionConsultas from "@/components/consultas/DialogActionConsultas.vue";
 interface CalendarType {
   text: string;
   value: string;
@@ -76,6 +72,7 @@ interface CalendarType {
   components: {
     TopBar,
     CardMain,
+    DialogActionConsultas,
     DialogActionAtendentes,
     DialogDeleteAtendentes,
   },

@@ -27,7 +27,7 @@
           outlined
           dense
         ></v-combobox>
-        <v-btn>Cadastrar Paciente</v-btn>
+        <!-- <v-btn>Cadastrar Paciente</v-btn> -->
         <v-menu
           ref="menuData"
           v-model="menuData"
@@ -40,7 +40,6 @@
             <v-text-field
               outlined
               v-model="dateFormat"
-              class="mt-7"
               label="Data"
               dense
               prepend-icon="mdi-calendar"
@@ -65,19 +64,19 @@
             </v-card-actions>
           </v-card>
         </v-menu>
-        <!-- <v-text-field
-          class="mt-7"
-          :readonly="mode == 'view'"
-          v-model="data"
-          label="Data "
+        <v-text-field
+          v-if="mode == 'add'"
+          v-model="observação"
+          label="Observação"
           type="text"
-          v-mask="'##/##/#### ##:##'"
           outlined
           dense
-        ></v-text-field> -->
+        ></v-text-field>
         <v-text-field
+          v-for="(obs, index) in observacoes"
+          :key="index"
           :readonly="mode == 'view'"
-          v-model="observacao"
+          :value="obs"
           label="Observação"
           type="text"
           outlined
@@ -119,7 +118,7 @@ import ConsultaService from "@/services/ConsultaService";
 })
 export default class DialogActionConsultas extends Vue {
   @Prop({ required: true }) dialog!: boolean;
-  @Prop() pessoaId!: number;
+  @Prop() consultaId!: number;
   @Prop({ default: "add" }) mode!: string;
   @Watch("dialog")
   dialogRootChange() {
@@ -129,7 +128,7 @@ export default class DialogActionConsultas extends Vue {
       this.findPaciente();
     }
   }
-  @Watch("pessoaId")
+  @Watch("consultaId")
   changePessoaId() {
     if (this.mode !== "add") {
       this.findMedicos();
@@ -149,7 +148,8 @@ export default class DialogActionConsultas extends Vue {
 
   paciente: PessoaDTO | string = "";
   pacientes: any[] = [];
-  observacao = "";
+  observação = "";
+  observacoes: string[] = [];
   date = moment().format("YYYY-MM-DD");
   time = moment().format("HH:mm");
 
@@ -170,6 +170,22 @@ export default class DialogActionConsultas extends Vue {
       value: el,
     }));
   }
+
+  async find() {
+    const consulta = await ConsultaService.find(this.consultaId);
+    console.log("consulta", consulta);
+    this.medico = (await MedicoService.find(consulta.doctorId)).name;
+    this.paciente = (await PacienteService.find(consulta.patientId)).name;
+    this.observacoes = consulta.observations;
+
+    const dataHora = consulta.consultationDate.split(" ");
+    const data = dataHora[0];
+    const hora = dataHora[1];
+    const dataVet = data.split("/");
+    this.date = `${dataVet[2]}-${dataVet[1]}-${dataVet[0]}`;
+    this.time = hora;
+  }
+
   async save() {
     try {
       let consulta = new ConsultaDTO();
@@ -177,7 +193,7 @@ export default class DialogActionConsultas extends Vue {
       consulta.consultationDate = this.dateFormat;
       consulta.doctorId = ((this.medico as any).value as MedicoDTO).id;
       consulta.patientId = ((this.paciente as any).value as PessoaDTO).id;
-      consulta.observations.push(this.observacao);
+      consulta.observations.push(this.observação);
       consulta.scheduled = moment().format("DD/MM/YYYY HH:mm");
       if (this.mode == "add") await ConsultaService.create(consulta);
       // if (this.mode == "edit") {
@@ -190,8 +206,13 @@ export default class DialogActionConsultas extends Vue {
     }
   }
   mounted() {
-    this.findMedicos();
-    this.findPaciente();
+    if (this.mode == "add" || this.mode == "edit") {
+      this.findMedicos();
+      this.findPaciente();
+    }
+    if (this.mode == "view" || this.mode == "edit") {
+      this.find();
+    }
   }
   constructor() {
     super();
