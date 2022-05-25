@@ -28,7 +28,44 @@
           dense
         ></v-combobox>
         <v-btn>Cadastrar Paciente</v-btn>
-        <v-text-field
+        <v-menu
+          ref="menuData"
+          v-model="menuData"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          offset-y
+          min-width="auto"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              outlined
+              v-model="dateFormat"
+              class="mt-7"
+              label="Data"
+              dense
+              prepend-icon="mdi-calendar"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-card elevation="2">
+            <v-card-text>
+              <v-date-picker v-model="date" no-title scrollable>
+              </v-date-picker>
+              <v-time-picker
+                no-title
+                scrollable
+                format="24hr"
+                v-model="time"
+              ></v-time-picker>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn text color="primary" @click="menuData = false"> OK </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+        <!-- <v-text-field
           class="mt-7"
           :readonly="mode == 'view'"
           v-model="data"
@@ -37,7 +74,7 @@
           v-mask="'##/##/#### ##:##'"
           outlined
           dense
-        ></v-text-field>
+        ></v-text-field> -->
         <v-text-field
           :readonly="mode == 'view'"
           v-model="observacao"
@@ -73,6 +110,7 @@ import MedicoDTO from "@/models/MedicoDTO";
 import PacienteService from "@/services/PacienteService";
 import moment from "moment";
 import ConsultaDTO from "@/models/ConsultaDTO";
+import ConsultaService from "@/services/ConsultaService";
 
 @Component({
   components: {
@@ -105,13 +143,20 @@ export default class DialogActionConsultas extends Vue {
       this.findPaciente();
     }
   }
+  menuData = false;
   medico: MedicoDTO | string = "";
   medicos: any[] = [];
 
   paciente: PessoaDTO | string = "";
   pacientes: any[] = [];
   observacao = "";
-  data = moment().format("DD/MM/yyyy HH:mm");
+  date = moment().format("YYYY-MM-DD");
+  time = moment().format("HH:mm");
+
+  get dateFormat() {
+    const vetData = this.date.split("-");
+    return `${vetData[2]}/${vetData[1]}/${vetData[0]} ${this.time}`;
+  }
 
   async findMedicos() {
     this.medicos = (await MedicoService.list()).map((el) => ({
@@ -128,12 +173,13 @@ export default class DialogActionConsultas extends Vue {
   async save() {
     try {
       let consulta = new ConsultaDTO();
-      consulta.data = this.data;
-      consulta.medico = this.medico as MedicoDTO;
-      consulta.paciente = this.paciente as PessoaDTO;
-      consulta.observacoes.push(this.observacao);
 
-      // if (this.mode == "add") await MedicoService.create(pessoa);
+      consulta.consultationDate = this.dateFormat;
+      consulta.doctorId = ((this.medico as any).value as MedicoDTO).id;
+      consulta.patientId = ((this.paciente as any).value as PessoaDTO).id;
+      consulta.observations.push(this.observacao);
+      consulta.scheduled = moment().format("DD/MM/YYYY HH:mm");
+      if (this.mode == "add") await ConsultaService.create(consulta);
       // if (this.mode == "edit") {
       //   pessoa.id = this.pessoaId;
       //   await MedicoService.update(pessoa);

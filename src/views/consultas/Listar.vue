@@ -66,6 +66,8 @@ import AtendenteService from "@/services/AtendenteService";
 import moment, { min } from "moment";
 import PessoaTable from "@/models/PessoaTable";
 import ConsultaDTO from "@/models/ConsultaDTO";
+import ConsultaService from "@/services/ConsultaService";
+import PacienteService from "@/services/PacienteService";
 interface CalendarType {
   text: string;
   value: string;
@@ -109,29 +111,13 @@ export default class ConsultaAtendenteListar extends Vue {
     if (!val) this.list();
   }
 
-  list() {
-    // const list = (await AtendenteService.list()) as any;
-    const cons1 = new ConsultaDTO();
-    cons1.id = 1;
-    cons1.paciente.name = "José Lopes";
-    cons1.data = "2022-05-16T14:00";
-    const cons2 = new ConsultaDTO();
-    cons1.id = 2;
-    cons2.paciente.name = "Maria das Chagas";
-    cons2.data = "2022-05-16T17:00";
-    const cons3 = new ConsultaDTO();
-    cons1.id = 3;
-    cons3.paciente.name = "Mário Vilela";
-    cons3.data = "2022-05-17T14:00";
-    const cons4 = new ConsultaDTO();
-    cons1.id = 4;
-    cons4.paciente.name = "Sandra Maria";
-    cons4.data = "2022-05-20T15:00";
-    const cons5 = new ConsultaDTO();
-    cons1.id = 5;
-    cons5.paciente.name = "Sandra Maria";
-    cons5.data = "2022-05-19T17:30";
-    return [cons1, cons2, cons3, cons4, cons5];
+  async list() {
+    const list = await ConsultaService.list();
+    for (const iterator of list) {
+      iterator.patient = await PacienteService.find(iterator.patientId);
+    }
+
+    return list;
   }
 
   openVer(e: any) {
@@ -149,17 +135,24 @@ export default class ConsultaAtendenteListar extends Vue {
     this.dialogApaga = true;
   }
 
-  getEvents(e: any) {
+  async getEvents(e: any) {
     const events = [];
-    const consultas = this.list();
+    const consultas = await this.list();
+    console.log("consultas", consultas);
     for (let i = 0; i < consultas.length; i++) {
-      const first = new Date(consultas[i].data);
-      let second = new Date(consultas[i].data);
+      const dataHoraVet = consultas[i].consultationDate.split(" ");
+      const data = dataHoraVet[0];
+      const hora = dataHoraVet[1];
+      const dataVet = data.split("/");
+      const dateFormatted = `${dataVet[2]}-${dataVet[1]}-${dataVet[0]}T${hora}`;
+      console.log("dateFormatted", dateFormatted);
+      const first = new Date(dateFormatted);
+      let second = new Date(dateFormatted);
       second.setTime(second.getTime() + 1 * 60 * 60 * 1000);
 
       events.push({
         id: consultas[i].id,
-        name: consultas[i].paciente.name,
+        name: consultas[i].patient.name,
         start: first,
         end: second,
         color: this.colors[i % this.colors.length],
