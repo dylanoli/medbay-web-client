@@ -17,7 +17,15 @@
           "
           ><v-icon>mdi-pencil</v-icon></v-btn
         >
-        <v-btn icon><v-icon color="red darken-2">mdi-delete</v-icon></v-btn>
+        <v-btn
+          icon
+          @click="
+            () => {
+              dialogDelete = true;
+            }
+          "
+          ><v-icon color="red darken-2">mdi-delete</v-icon></v-btn
+        >
       </v-card-title>
       <v-card-title class="text-h5" v-if="mode == 'edit'">
         Alterar consulta
@@ -127,6 +135,21 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog v-model="dialogDelete" persistent max-width="500">
+      <v-card>
+        <v-card-title class="text-h5">Apagar consulta</v-card-title>
+        <v-card-text>
+          Tem certeza que deseja apagar essa consulta?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="dialog = false"> Cancelar </v-btn>
+          <v-btn color="red darken-1" dark @click="deletePessoa()">
+            Apagar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-dialog>
 </template>
 
@@ -155,7 +178,7 @@ export default class DialogActionConsultas extends Vue {
   @Prop({ default: "add" }) modeInit!: string;
 
   mode = "add";
-
+  dialogDelete = false;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
@@ -225,7 +248,11 @@ export default class DialogActionConsultas extends Vue {
       value: el,
     }));
   }
-
+  async deletePessoa() {
+    await ConsultaService.delete(this.consultaId);
+    this.dialogDelete = false;
+    this.dialog = false;
+  }
   async find() {
     const consulta = await ConsultaService.find(this.consultaId);
     this.medico = (await MedicoService.find(consulta.doctorId)).name;

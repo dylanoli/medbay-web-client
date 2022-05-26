@@ -46,7 +46,6 @@
       modeInit="view"
       :consultaId="idTarget"
     />
-    <DialogDeleteAtendentes :dialog.sync="dialogApaga" :pessoaId="idTarget" />
   </div>
 </template>
 
@@ -55,12 +54,6 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 
 import TopBar from "@/components/TopBar.vue";
 import CardMain from "@/components/CardMain.vue";
-import DialogActionAtendentes from "@/components/atendentes/DialogActionAtendentes.vue";
-import DialogDeleteAtendentes from "@/components/atendentes/DialogDeleteAtendentes.vue";
-import AtendenteService from "@/services/AtendenteService";
-import moment, { min } from "moment";
-import PessoaTable from "@/models/PessoaTable";
-import ConsultaDTO from "@/models/ConsultaDTO";
 import ConsultaService from "@/services/ConsultaService";
 import PacienteService from "@/services/PacienteService";
 import DialogActionConsultas from "@/components/consultas/DialogActionConsultas.vue";
@@ -73,8 +66,6 @@ interface CalendarType {
     TopBar,
     CardMain,
     DialogActionConsultas,
-    DialogActionAtendentes,
-    DialogDeleteAtendentes,
   },
 })
 export default class ConsultaAtendenteListar extends Vue {
@@ -89,10 +80,7 @@ export default class ConsultaAtendenteListar extends Vue {
   events: any[] = [];
   colors = ["blue", "indigo", "deep-purple", "cyan", "green", "orange"];
 
-  // consultas: ConsultaDTO[] = [];
-
   dialogEdit = false;
-  dialogApaga = false;
   dialogView = false;
   idTarget = 0;
 
@@ -100,11 +88,6 @@ export default class ConsultaAtendenteListar extends Vue {
 
   @Watch("dialogEdit")
   changedialogEdit(val: boolean) {
-    if (!val) this.getEvents();
-  }
-
-  @Watch("dialogApaga")
-  changedialogApaga(val: boolean) {
     if (!val) this.getEvents();
   }
 
@@ -125,11 +108,6 @@ export default class ConsultaAtendenteListar extends Vue {
   openEditar(id: number) {
     this.idTarget = id;
     this.dialogEdit = true;
-  }
-
-  openApagar(id: number) {
-    this.idTarget = id;
-    this.dialogApaga = true;
   }
 
   async getEvents() {
