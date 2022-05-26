@@ -43,7 +43,7 @@
     </div>
     <DialogActionConsultas
       :dialog.sync="dialogView"
-      mode="view"
+      modeInit="view"
       :consultaId="idTarget"
     />
     <DialogDeleteAtendentes :dialog.sync="dialogApaga" :pessoaId="idTarget" />
@@ -100,12 +100,12 @@ export default class ConsultaAtendenteListar extends Vue {
 
   @Watch("dialogEdit")
   changedialogEdit(val: boolean) {
-    if (!val) this.list();
+    if (!val) this.getEvents();
   }
 
   @Watch("dialogApaga")
   changedialogApaga(val: boolean) {
-    if (!val) this.list();
+    if (!val) this.getEvents();
   }
 
   async list() {
@@ -132,7 +132,7 @@ export default class ConsultaAtendenteListar extends Vue {
     this.dialogApaga = true;
   }
 
-  async getEvents(e: any) {
+  async getEvents() {
     const events = [];
     const consultas = await this.list();
     console.log("consultas", consultas);

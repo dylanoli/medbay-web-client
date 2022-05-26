@@ -6,6 +6,18 @@
       </v-card-title>
       <v-card-title class="text-h5" v-if="mode == 'view'">
         Consulta
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          class="mr-3"
+          @click="
+            () => {
+              mode = 'edit';
+            }
+          "
+          ><v-icon>mdi-pencil</v-icon></v-btn
+        >
+        <v-btn icon><v-icon color="red darken-2">mdi-delete</v-icon></v-btn>
       </v-card-title>
       <v-card-title class="text-h5" v-if="mode == 'edit'">
         Alterar consulta
@@ -72,16 +84,37 @@
           outlined
           dense
         ></v-text-field>
-        <v-text-field
-          v-for="(obs, index) in observacoes"
-          :key="index"
-          :readonly="mode == 'view'"
-          :value="obs"
-          label="Observação"
-          type="text"
-          outlined
-          dense
-        ></v-text-field>
+        <div v-for="(obs, index) in observacoes" :key="index" class="d-flex">
+          <v-text-field
+            :readonly="mode == 'view'"
+            v-model="observacoes[index]"
+            label="Observação"
+            type="text"
+            outlined
+            dense
+          ></v-text-field>
+          <v-btn
+            height="40"
+            v-if="mode == 'edit'"
+            @click="
+              () => {
+                removeObs(index);
+              }
+            "
+            ><v-icon>mdi-delete</v-icon></v-btn
+          >
+        </div>
+
+        <v-btn
+          v-if="mode == 'edit'"
+          block
+          @click="
+            () => {
+              observacoes.push('');
+            }
+          "
+          >Adicionar<v-icon>mdi-plus</v-icon></v-btn
+        >
       </div>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -119,7 +152,10 @@ import ConsultaService from "@/services/ConsultaService";
 export default class DialogActionConsultas extends Vue {
   @Prop({ required: true }) dialog!: boolean;
   @Prop() consultaId!: number;
-  @Prop({ default: "add" }) mode!: string;
+  @Prop({ default: "add" }) modeInit!: string;
+
+  mode = "add";
+
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
@@ -130,11 +166,24 @@ export default class DialogActionConsultas extends Vue {
   }
   @Watch("consultaId")
   changePessoaId() {
+    console.log("changePessoaId");
     if (this.mode !== "add") {
+      this.find();
       this.findMedicos();
       this.findPaciente();
     }
   }
+  @Watch("modeInit")
+  changeModeInit() {
+    this.mode = this.modeInit;
+    console.log("changeMode");
+    if (this.mode !== "add") {
+      this.find();
+      this.findMedicos();
+      this.findPaciente();
+    }
+  }
+
   @Watch("mode")
   changeMode() {
     if (this.mode !== "add") {
@@ -157,7 +206,13 @@ export default class DialogActionConsultas extends Vue {
     const vetData = this.date.split("-");
     return `${vetData[2]}/${vetData[1]}/${vetData[0]} ${this.time}`;
   }
-
+  changeObs(obs: string, index: number) {
+    console.log("obs", obs);
+    this.$set(this.observacoes, index, obs);
+  }
+  removeObs(index: number) {
+    this.observacoes.splice(index, 1);
+  }
   async findMedicos() {
     this.medicos = (await MedicoService.list()).map((el) => ({
       text: el.name,
@@ -173,7 +228,6 @@ export default class DialogActionConsultas extends Vue {
 
   async find() {
     const consulta = await ConsultaService.find(this.consultaId);
-    console.log("consulta", consulta);
     this.medico = (await MedicoService.find(consulta.doctorId)).name;
     this.paciente = (await PacienteService.find(consulta.patientId)).name;
     this.observacoes = consulta.observations;
@@ -189,23 +243,38 @@ export default class DialogActionConsultas extends Vue {
   async save() {
     try {
       let consulta = new ConsultaDTO();
-
       consulta.consultationDate = this.dateFormat;
-      consulta.doctorId = ((this.medico as any).value as MedicoDTO).id;
-      consulta.patientId = ((this.paciente as any).value as PessoaDTO).id;
-      consulta.observations.push(this.observação);
+      if ((this.medico as any).value) {
+        consulta.doctorId = ((this.medico as any).value as MedicoDTO).id;
+      } else {
+        consulta.doctorId = this.medicos.find(
+          (el) => el.text == this.medico
+        ).value.id;
+      }
+      if ((this.paciente as any).value) {
+        consulta.patientId = ((this.paciente as any).value as PessoaDTO).id;
+      } else {
+        consulta.patientId = this.pacientes.find(
+          (el) => el.text == this.paciente
+        ).value.id;
+      }
       consulta.scheduled = moment().format("DD/MM/YYYY HH:mm");
-      if (this.mode == "add") await ConsultaService.create(consulta);
-      // if (this.mode == "edit") {
-      //   pessoa.id = this.pessoaId;
-      //   await MedicoService.update(pessoa);
-      // }
+      if (this.mode == "add") {
+        consulta.observations.push(this.observação);
+        await ConsultaService.create(consulta);
+      }
+      if (this.mode == "edit") {
+        consulta.id = this.consultaId;
+        consulta.observations = this.observacoes;
+        await ConsultaService.update(consulta);
+      }
       this.dialog = false;
     } catch (error) {
       console.log(error);
     }
   }
   mounted() {
+    this.mode = this.modeInit;
     if (this.mode == "add" || this.mode == "edit") {
       this.findMedicos();
       this.findPaciente();
