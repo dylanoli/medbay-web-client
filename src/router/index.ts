@@ -7,6 +7,7 @@ import MedicoListar from '../views/medico/Listar.vue'
 import AtendentesListar from '../views/atendentes/Listar.vue'
 import PacientesListar from '../views/pacientes/Listar.vue'
 import ConsultaAtendenteListar from '../views/consultas/Listar.vue'
+import ConsultaMedicoListar from '../views/consultas/MedicoListar.vue'
 
 import HomeUsuario from '../views/usuario/HomeUsuario.vue'
 
@@ -52,6 +53,11 @@ const routes: Array<RouteConfig> = [
     path: '/atendentes/consultas',
     name: 'ConsultaAtendenteListar',
     component: ConsultaAtendenteListar
+  },
+  {
+    path: '/medicos/consultas',
+    name: 'ConsultaMedicoListar',
+    component: ConsultaMedicoListar
   },
 
 ]

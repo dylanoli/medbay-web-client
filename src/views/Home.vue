@@ -61,7 +61,7 @@ export default class Home extends Vue {
     img: "paciente",
   };
 
-  consultas: MenuItem = {
+  atendenteConsultas: MenuItem = {
     titulo: "Consultas",
     descricao:
       "Tenha acesso a todos os dados referentes às Consultas da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
@@ -69,6 +69,13 @@ export default class Home extends Vue {
     img: "consulta",
   };
 
+  medicoConsultas: MenuItem = {
+    titulo: "Consultas",
+    descricao:
+      "Tenha acesso a todos os dados referentes às Consultas da sua clínica. Adicione novos, exclua-os ou edite suas informações.",
+    to: "/medicos/consultas",
+    img: "consulta",
+  };
   menuItens: MenuItem[] = [];
   getImgUrl(url: string) {
     var images = require.context("../assets/", false, /\.png$/);
@@ -88,13 +95,11 @@ export default class Home extends Vue {
       this.menuItens.push(this.medicos);
       this.menuItens.push(this.atendentes);
       this.menuItens.push(this.pacientes);
-    } else if (
-      this.user.roles.some(
-        (el) =>
-          el.authority == "ROLE_ATENDENTE" || el.authority == "ROLE_MEDICO"
-      )
-    ) {
-      this.menuItens.push(this.consultas);
+    } else if (this.user.roles.some((el) => el.authority == "ROLE_ATENDENTE")) {
+      this.menuItens.push(this.atendenteConsultas);
+      this.menuItens.push(this.pacientes);
+    } else if (this.user.roles.some((el) => el.authority == "ROLE_MEDICO")) {
+      this.menuItens.push(this.medicoConsultas);
       this.menuItens.push(this.pacientes);
     } else {
       this.$router.push("/home");
