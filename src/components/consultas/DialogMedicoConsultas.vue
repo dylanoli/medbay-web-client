@@ -6,53 +6,16 @@
         <strong>Medico:</strong> {{ medico.name }}
         <br />
         <strong>Paciente:</strong>
-        <div><strong>Nome:</strong> {{ paciente.name }}</div>
-
-        <!-- <v-btn>Cadastrar Paciente</v-btn> -->
-        <v-menu
-          ref="menuData"
-          v-model="menuData"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              outlined
-              v-model="dateFormat"
-              label="Data"
-              dense
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-card elevation="2">
-            <v-card-text>
-              <v-date-picker v-model="date" no-title scrollable>
-              </v-date-picker>
-              <v-time-picker
-                no-title
-                scrollable
-                format="24hr"
-                v-model="time"
-              ></v-time-picker>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn text color="primary" @click="menuData = false"> OK </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-menu>
+        <ActionPaciente :readonly="true" :target.sync="paciente" />
         <v-text-field
-          v-if="mode == 'add'"
-          v-model="observação"
-          label="Observação"
-          type="text"
           outlined
+          v-model="dateFormat"
+          label="Data da consulta"
           dense
+          prepend-icon="mdi-calendar"
+          readonly
         ></v-text-field>
+        Observações:
         <div v-for="(obs, index) in consulta.observations" :key="index">
           <p>{{ obs }}</p>
         </div>
@@ -60,29 +23,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="dialog = false"> Fechar </v-btn>
-        <v-btn color="primary" dark @click="save()" v-if="mode == 'add'">
-          Cadastrar
-        </v-btn>
-        <v-btn color="primary" dark @click="save()" v-if="mode == 'edit'">
-          Alterar
-        </v-btn>
       </v-card-actions>
     </v-card>
-    <v-dialog v-model="dialogDelete" persistent max-width="500">
-      <v-card>
-        <v-card-title class="text-h5">Apagar consulta</v-card-title>
-        <v-card-text>
-          Tem certeza que deseja apagar essa consulta?
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="dialog = false"> Cancelar </v-btn>
-          <v-btn color="red darken-1" dark @click="deletePessoa()">
-            Apagar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-dialog>
 </template>
 
@@ -97,9 +39,12 @@ import PacienteService from "@/services/PacienteService";
 import moment from "moment";
 import ConsultaDTO from "@/models/ConsultaDTO";
 import ConsultaService from "@/services/ConsultaService";
+import ActionPaciente from "../paciente/ActionPaciente.vue";
 
 @Component({
-  components: {},
+  components: {
+    ActionPaciente,
+  },
 })
 export default class DialogMedicoConsultas extends Vue {
   @Prop({ required: true }) dialog!: boolean;

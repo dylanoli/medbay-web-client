@@ -1,59 +1,57 @@
 <template>
   <div style="margin: 20px">
     <v-text-field
-      v-model="cpf"
+      v-model="pessoa.document"
       label="CPF*"
       type="text"
-      :readonly="mode == 'view'"
+      :readonly="readonly"
       v-mask="'###.###.###-##'"
       :rules="[(v) => !!v || 'CPF é obrigatório']"
       outlined
       dense
     ></v-text-field>
     <v-text-field
-      :readonly="mode == 'view'"
+      :readonly="readonly"
       id="name"
-      v-model="nome"
+      v-model="pessoa.name"
       label="Nome*"
       type="text"
       outlined
       :rules="[(v) => !!v || 'nome é obrigatório']"
       dense
     ></v-text-field>
-    <div v-if="mode !== 'view'">
+    <div v-if="!readonly">
       <v-btn
         class="mr-5 mb-5"
-        :color="genero == 'Masculino' ? 'primary' : ''"
-        @click="genero = 'Masculino'"
+        :color="pessoa.gender == 'MALE' ? 'primary' : ''"
+        @click="pessoa.gender = 'MALE'"
         >Masculino</v-btn
       >
       <v-btn
         class="mb-5"
-        :color="genero == 'Feminino' ? 'primary' : ''"
-        @click="genero = 'Feminino'"
+        :color="pessoa.gender == 'FEMALE' ? 'primary' : ''"
+        @click="pessoa.gender = 'FEMALE'"
         >Feminino</v-btn
       >
     </div>
-    <div v-else>
-      <v-text-field
-        readonly
-        v-model="genero"
-        label="Gênero*"
-        type="text"
-        outlined
-        dense
-      ></v-text-field>
-    </div>
     <v-text-field
-      :readonly="mode == 'view'"
-      v-model="dataNascimento"
+      v-else
+      :value="pessoa.gender == 'MALE' ? 'Masculino' : 'Feminino'"
+      label="Gênero"
+      outlined
+      dense
+      readonly
+    />
+    <v-text-field
+      :readonly="readonly"
+      v-model="pessoa.birth"
       label="Data de nascimento"
       type="text"
       v-mask="'##/##/####'"
       outlined
       dense
     ></v-text-field>
-    <EnderecoInput :target.sync="endereco" :readonly="mode == 'view'" />
+    <EnderecoInput :target.sync="pessoa.address" :readonly="readonly" />
   </div>
 </template>
 
@@ -72,65 +70,16 @@ import { Prop, Watch } from "vue-property-decorator";
   },
 })
 export default class ActionPaciente extends Vue {
-  @Prop() pessoaId!: number;
-  @Prop({ default: "add" }) mode!: string;
+  @Prop({ default: false }) readonly!: boolean;
+  @Prop({ required: true }) target!: PessoaDTO;
 
-  @Watch("pessoaId")
-  changePessoaId() {
-    if (this.mode !== "add") {
-      this.find();
-    }
-  }
-  @Watch("mode")
-  changeMode() {
-    if (this.mode !== "add") {
-      this.find();
-    }
+  @Watch("target")
+  changeTarget() {
+    this.pessoa = this.target;
   }
 
-  cpf = "";
-  nome = "";
-  dataNascimento = "";
-  genero = "Masculino";
   pessoa = new PessoaDTO();
-  endereco = new EnderecoDTO();
-  async find() {
-    const pessoa = (await PacienteService.find(this.pessoaId)) as any;
-    this.cpf = pessoa.document;
-    this.nome = pessoa.name;
-    this.genero = pessoa.gender == "MALE" ? "Masculino" : "Feminino";
-    this.dataNascimento = pessoa.birth;
 
-    this.endereco.cep = pessoa.address.cep;
-    this.endereco.rua = pessoa.address.street;
-    this.endereco.numero = pessoa.address.number;
-    this.endereco.bairro = pessoa.address.country;
-    this.endereco.cidade = pessoa.address.city;
-    this.endereco.uf = pessoa.address.uf;
-  }
-  async save() {
-    let pessoa = new PessoaDTO();
-    pessoa.document = this.cpf;
-    pessoa.name = this.nome;
-    pessoa.username = this.cpf;
-    pessoa.password = "senha123";
-
-    const dataVet = this.dataNascimento.split("/");
-    pessoa.birth = `${dataVet[0]}/${dataVet[1]}/${dataVet[2]}`;
-    pessoa.gender = this.genero == "Masculino" ? "MALE" : "FEMALE";
-    pessoa.address.cep = this.endereco.cep;
-    pessoa.address.street = this.endereco.rua;
-    pessoa.address.number = this.endereco.numero;
-    pessoa.address.country = this.endereco.bairro;
-    pessoa.address.city = this.endereco.cidade;
-    pessoa.address.uf = this.endereco.uf;
-    if (this.mode == "add") await PacienteService.create(pessoa);
-    if (this.mode == "edit") {
-      pessoa.id = this.pessoaId;
-      await PacienteService.update(pessoa);
-    }
-    this.dialog = false;
-  }
   constructor() {
     super();
   }
