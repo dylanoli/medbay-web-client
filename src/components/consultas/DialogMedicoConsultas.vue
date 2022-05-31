@@ -1,31 +1,80 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="500">
-    <v-card>
-      <v-card-title class="text-h5"> Consulta </v-card-title>
-      <div style="margin: 20px">
-        <strong>Medico:</strong> {{ medico.name }}
-        <br />
-        <strong>Paciente:</strong>
-        <ActionPaciente :readonly="true" :target.sync="paciente" />
-        <v-text-field
-          outlined
-          v-model="dateFormat"
-          label="Data da consulta"
-          dense
-          prepend-icon="mdi-calendar"
-          readonly
-        ></v-text-field>
-        Observações:
-        <div v-for="(obs, index) in consulta.observations" :key="index">
-          <p>{{ obs }}</p>
+  <div>
+    <v-dialog v-model="dialog" persistent max-width="500">
+      <v-card>
+        <v-card-title class="text-h5" v-if="consulta.status == 'SCHEDULED'">
+          Consulta
+        </v-card-title>
+        <v-card-title class="text-h5" v-else>
+          Consulta Finalizada ✅</v-card-title
+        >
+
+        <div style="margin: 20px">
+          <strong>Medico:</strong> {{ medico.name }}
+          <br />
+          <strong>Paciente:</strong>
+          <ActionPaciente :readonly="true" :target.sync="paciente" />
+          <v-text-field
+            outlined
+            v-model="dateFormat"
+            label="Data da consulta"
+            dense
+            prepend-icon="mdi-calendar"
+            readonly
+          ></v-text-field>
+          Observações:
+          <div v-for="(obs, index) in consulta.observations" :key="index">
+            <p>{{ obs }}</p>
+          </div>
         </div>
-      </div>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="dialog = false"> Fechar </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            text
+            v-if="consulta.status == 'SCHEDULED'"
+            @click="
+              () => {
+                dialogFinaliza = true;
+                dialog = false;
+              }
+            "
+          >
+            Finalizar consulta</v-btn
+          >
+          <v-spacer></v-spacer>
+          <v-btn text @click="dialog = false"> Fechar </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogFinaliza" persistent max-width="500">
+      <v-card>
+        <v-card-title class="text-h5"> Finalizar consulta </v-card-title>
+        <div style="margin: 20px">
+          <v-text-field
+            outlined
+            v-model="observacao"
+            label="Observação"
+            dense
+          ></v-text-field>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="finaliza"> Finalizar</v-btn>
+          <v-btn
+            text
+            @click="
+              () => {
+                dialogFinaliza = false;
+                dialog = true;
+              }
+            "
+          >
+            Cancelar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script lang="ts">
@@ -50,7 +99,7 @@ export default class DialogMedicoConsultas extends Vue {
   @Prop({ required: true }) dialog!: boolean;
   @Prop() consultaId!: number;
 
-  dialogDelete = false;
+  dialogFinaliza = false;
   @Watch("dialog")
   dialogRootChange() {
     this.$emit("update:dialog", this.dialog);
@@ -73,11 +122,6 @@ export default class DialogMedicoConsultas extends Vue {
   time = moment().format("HH:mm");
   consulta: ConsultaDTO = new ConsultaDTO();
 
-  async deletePessoa() {
-    await ConsultaService.delete(this.consultaId);
-    this.dialogDelete = false;
-    this.dialog = false;
-  }
   async find() {
     this.consulta = await ConsultaService.find(this.consultaId);
     this.medico = await MedicoService.find(this.consulta.doctorId);
@@ -91,11 +135,14 @@ export default class DialogMedicoConsultas extends Vue {
     this.time = hora;
   }
 
-  async save() {
+  async finaliza() {
+    console.log("ola");
     try {
       this.consulta.observations.push(this.observacao);
+      this.consulta.status = "DONE";
       await ConsultaService.update(this.consulta);
       this.dialog = false;
+      this.dialogFinaliza = false;
     } catch (error) {
       console.log(error);
     }
