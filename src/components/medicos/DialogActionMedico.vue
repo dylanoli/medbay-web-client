@@ -143,10 +143,10 @@ export default class DialogActionMedico extends Vue {
     this.dataNascimento = pessoa.birth;
 
     this.endereco.cep = pessoa.address.cep;
-    this.endereco.rua = pessoa.address.street;
-    this.endereco.numero = pessoa.address.number;
-    this.endereco.bairro = pessoa.address.country;
-    this.endereco.cidade = pessoa.address.city;
+    this.endereco.street = pessoa.address.street;
+    this.endereco.number = pessoa.address.number;
+    this.endereco.country = pessoa.address.country;
+    this.endereco.city = pessoa.address.city;
     this.endereco.uf = pessoa.address.uf;
   }
   async save() {
@@ -162,10 +162,10 @@ export default class DialogActionMedico extends Vue {
       pessoa.birth = `${dataVet[0]}/${dataVet[1]}/${dataVet[2]}`;
       pessoa.gender = this.genero == "Masculino" ? "MALE" : "FEMALE";
       pessoa.address.cep = this.endereco.cep;
-      pessoa.address.street = this.endereco.rua;
-      pessoa.address.number = this.endereco.numero;
-      pessoa.address.country = this.endereco.bairro;
-      pessoa.address.city = this.endereco.cidade;
+      pessoa.address.street = this.endereco.street;
+      pessoa.address.number = this.endereco.number;
+      pessoa.address.country = this.endereco.country;
+      pessoa.address.city = this.endereco.city;
       pessoa.address.uf = this.endereco.uf;
       if (this.mode == "add") await MedicoService.create(pessoa);
       if (this.mode == "edit") {

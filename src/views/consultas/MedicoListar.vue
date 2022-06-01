@@ -37,6 +37,9 @@
             >
             </v-calendar>
           </v-sheet>
+          <v-btn block text class="mt-5" @click="backToMenu"
+            ><v-icon>mdi-arrow-left</v-icon>Voltar</v-btn
+          >
         </div>
       </div>
     </div>
@@ -56,6 +59,7 @@ import CardMain from "@/components/CardMain.vue";
 import ConsultaService from "@/services/ConsultaService";
 import PacienteService from "@/services/PacienteService";
 import DialogMedicoConsultas from "@/components/consultas/DialogMedicoConsultas.vue";
+import PessoaDTO from "@/models/PessoaDTO";
 interface CalendarType {
   text: string;
   value: string;
@@ -98,7 +102,9 @@ export default class ConsultaMedicoListar extends Vue {
 
     return list;
   }
-
+  backToMenu() {
+    this.$router.push("/");
+  }
   openVer(e: any) {
     this.idTarget = e.event.id;
     this.dialogView = true;

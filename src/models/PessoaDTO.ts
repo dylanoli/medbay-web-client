@@ -1,4 +1,5 @@
 import Address from "./Address";
+import EnderecoDTO from "./EnderecoDTO";
 import { RoleEnum } from "./UserDTO";
 
 
@@ -18,7 +19,6 @@ export interface MedaData {
     createdAt: Date;
     id: number;
     key: string;
-    profile: Profile;
     value: string;
 }
 
@@ -36,7 +36,7 @@ export class Role {
 }
 
 export default class {
-    address: Address = new Address();
+    address: EnderecoDTO = new EnderecoDTO();
     birth: string = '';
     document: string = '';
     gender: 'MALE' | 'FEMALE' = 'MALE';

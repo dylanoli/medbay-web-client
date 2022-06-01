@@ -130,12 +130,12 @@ export default class DialogActionAtendentes extends Vue {
     this.genero = pessoa.gender == "MALE" ? "Masculino" : "Feminino";
     this.dataNascimento = pessoa.birth;
 
-    this.endereco.cep = pessoa.address.cep;
-    this.endereco.rua = pessoa.address.street;
-    this.endereco.numero = pessoa.address.number;
-    this.endereco.bairro = pessoa.address.country;
-    this.endereco.cidade = pessoa.address.city;
-    this.endereco.uf = pessoa.address.uf;
+    this.endereco = pessoa.address;
+    // this.endereco.rua = pessoa.address.street;
+    // this.endereco.numero = pessoa.address.number;
+    // this.endereco.bairro = pessoa.address.country;
+    // this.endereco.cidade = pessoa.address.city;
+    // this.endereco.uf = pessoa.address.uf;
   }
   async save() {
     let pessoa = new PessoaDTO();
@@ -147,12 +147,12 @@ export default class DialogActionAtendentes extends Vue {
     const dataVet = this.dataNascimento.split("/");
     pessoa.birth = `${dataVet[0]}/${dataVet[1]}/${dataVet[2]}`;
     pessoa.gender = this.genero == "Masculino" ? "MALE" : "FEMALE";
-    pessoa.address.cep = this.endereco.cep;
-    pessoa.address.street = this.endereco.rua;
-    pessoa.address.number = this.endereco.numero;
-    pessoa.address.country = this.endereco.bairro;
-    pessoa.address.city = this.endereco.cidade;
-    pessoa.address.uf = this.endereco.uf;
+    pessoa.address = this.endereco;
+    // pessoa.address.street = this.endereco.rua;
+    // pessoa.address.number = this.endereco.numero;
+    // pessoa.address.country = this.endereco.bairro;
+    // pessoa.address.city = this.endereco.cidade;
+    // pessoa.address.uf = this.endereco.uf;
     if (this.mode == "add") await AtendenteService.create(pessoa);
     if (this.mode == "edit") {
       pessoa.id = this.pessoaId;

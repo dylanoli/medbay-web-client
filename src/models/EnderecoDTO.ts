@@ -1,10 +1,10 @@
 export default class EnderecoDTO {
     id: number = 0;
-    rua: string = '';
-    numero: string = '';
-    bairro: string = '';
-    complemento: string = '';
-    cidade: string = '';
+    street: string = '';
+    number: string = '';
+    country: string = '';
+    complement: string = '';
+    city: string = '';
     uf: string = '';
     pais: string = 'Brasil';
     cep: string = '';

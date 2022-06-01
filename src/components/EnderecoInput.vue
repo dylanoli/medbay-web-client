@@ -34,7 +34,7 @@
           outlined
           type="text"
           dense
-          v-model="endereco.rua"
+          v-model="endereco.street"
         ></v-text-field>
       </v-col>
       <v-col md="3" cols="3">
@@ -44,7 +44,7 @@
           outlined
           type="text"
           dense
-          v-model="endereco.numero"
+          v-model="endereco.number"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -56,7 +56,7 @@
           outlined
           type="text"
           dense
-          v-model="endereco.bairro"
+          v-model="endereco.country"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -68,7 +68,7 @@
           outlined
           type="text"
           dense
-          v-model="endereco.cidade"
+          v-model="endereco.city"
         ></v-text-field>
       </v-col>
       <v-col md="3" cols="12" style="padding-left: 12px">
@@ -85,93 +85,88 @@
     </v-row>
   </div>
 </template>
-<script>
+<script lang="ts">
+import EnderecoDTO from "@/models/EnderecoDTO";
 import { api } from "@/services";
-export default {
-  props: {
-    target: {
-      required: true,
-    },
-    readonly: {
-      required: false,
-    },
-  },
+import { Component, Prop, Watch } from "vue-property-decorator";
+import Vue from "vue";
+@Component({
+  components: {},
+})
+export default class EnderecoInput extends Vue {
+  @Prop({ required: true }) target!: EnderecoDTO;
+  @Prop({ default: false }) readonly!: boolean;
+
   mounted() {
     this.endereco = this.target;
-  },
-  watch: {
-    endereco() {
-      if (this.endereco != undefined)
-        this.$emit("update:target", this.endereco);
-    },
-    target(newValue) {
-      this.endereco = newValue;
-    },
-  },
-  methods: {
-    formatUf() {
-      const vm = this;
-      vm.endereco.uf = vm.endereco.uf.toLocaleUpperCase();
-    },
-    async buscaCep() {
-      this.loadCep = true;
-      try {
-        const cep = this.endereco.cep.replace("-", "");
-        const response = await api.get(`https://viacep.com.br/ws/${cep}/json/`);
-        this.loadCep = false;
-        if (response.data.erro == undefined) {
-          this.endereco = {
-            ...this.endereco,
-            cep: response.data.cep,
-            rua: response.data.logradouro,
-            bairro: response.data.bairro,
-            uf: response.data.uf,
-            cidade: response.data.localidade,
-          };
-        } else {
-          this.loadCep = false;
-          this.$store.commit("setError", "CEP não encontrado");
-        }
-      } catch (error) {
+  }
+  @Watch("endereco")
+  changeEndereco() {
+    if (this.endereco != undefined) this.$emit("update:target", this.endereco);
+  }
+  @Watch("target")
+  changeTarget(newValue: EnderecoDTO) {
+    this.endereco = newValue;
+  }
+
+  loadCep = false;
+  endereco = new EnderecoDTO();
+  estados = [
+    "AC",
+    "AL",
+    "AP",
+    "AM",
+    "BA",
+    "CE",
+    "DF",
+    "ES",
+    "GO",
+    "MA",
+    "MT",
+    "MS",
+    "MG",
+    "PA",
+    "PB",
+    "PR",
+    "PE",
+    "PI",
+    "RJ",
+    "RN",
+    "RS",
+    "RO",
+    "RR",
+    "SC",
+    "SP",
+    "SE",
+    "TO",
+  ];
+  formatUf() {
+    const vm = this;
+    vm.endereco.uf = vm.endereco.uf.toLocaleUpperCase();
+  }
+  async buscaCep() {
+    this.loadCep = true;
+    try {
+      const cep = this.endereco.cep.replace("-", "");
+      const response = await api.get(`https://viacep.com.br/ws/${cep}/json/`);
+      this.loadCep = false;
+      if (response.data.erro == undefined) {
+        this.endereco = {
+          ...this.endereco,
+          cep: response.data.cep,
+          street: response.data.logradouro,
+          country: response.data.bairro,
+          uf: response.data.uf,
+          city: response.data.localidade,
+        };
+      } else {
         this.loadCep = false;
         this.$store.commit("setError", "CEP não encontrado");
       }
-    },
-  },
-  data: () => ({
-    loadCep: false,
-    endereco: {
-      cep: "",
-    },
-    estados: [
-      "AC",
-      "AL",
-      "AP",
-      "AM",
-      "BA",
-      "CE",
-      "DF",
-      "ES",
-      "GO",
-      "MA",
-      "MT",
-      "MS",
-      "MG",
-      "PA",
-      "PB",
-      "PR",
-      "PE",
-      "PI",
-      "RJ",
-      "RN",
-      "RS",
-      "RO",
-      "RR",
-      "SC",
-      "SP",
-      "SE",
-      "TO",
-    ],
-  }),
-};
+    } catch (error) {
+      this.loadCep = false;
+      this.$store.commit("setError", "CEP não encontrado");
+    }
+  }
+}
 </script>
