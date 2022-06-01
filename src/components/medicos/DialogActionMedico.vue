@@ -96,7 +96,6 @@ import EnderecoDTO from "@/models/EnderecoDTO";
 import EnderecoInput from "@/components/EnderecoInput.vue";
 import { Prop, Watch } from "vue-property-decorator";
 import MedicoService from "@/services/MedicoService";
-import PessoaDTO from "@/models/PessoaDTO";
 import MedicoDTO from "@/models/MedicoDTO";
 
 @Component({

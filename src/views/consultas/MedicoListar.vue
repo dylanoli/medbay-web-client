@@ -132,7 +132,10 @@ export default class ConsultaMedicoListar extends Vue {
 
       events.push({
         id: consultas[i].id,
-        name: consultas[i].patient.name,
+        name:
+          consultas[i].status == "SCHEDULED"
+            ? consultas[i].patient.name
+            : `${consultas[i].patient.name} ✔️`,
         start: first,
         end: second,
         color: this.colors[i % this.colors.length],
