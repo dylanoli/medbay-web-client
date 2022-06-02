@@ -5,6 +5,9 @@
       <CardMain titulo="Consultas" img="consulta" mode="consulta" />
       <div>
         <div style="width: 60vw">
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title }}
+          </v-toolbar-title>
           <v-sheet tile height="54" class="d-flex">
             <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
               <v-icon>mdi-chevron-left</v-icon>
